@@ -8,6 +8,7 @@ const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const async = require("async");
 const colors = require("colors");
+const formatDate = require("./date");
 const connectDb = require("./config/db");
 // config dot env file
 dotenv.config();
@@ -29,6 +30,7 @@ app.use(express.static("public"));
 
 
 const postSchema = {
+  date: {type: String, default: formatDate(new Date().toISOString)},
   title: String,
   content: String
 };
@@ -57,6 +59,7 @@ app.get("/compose", function(req, res){
 
 app.post("/compose", function(req, res){
   const post = new Post ({
+    date: req.body.postDate,
     title: req.body.postTitle,
     content: req.body.postBody
   });
@@ -71,6 +74,7 @@ app.get("/posts/:postId", async(req, res)=> {
   
     const post = await Post.findOne({_id: requestedPostId}).exec();
       res.render("post", {
+        date: post.date,
         title: post.title,
         content: post.content
       });

@@ -7,12 +7,12 @@
 
   <%  posts.forEach(function(post){ %>
 
-    <h1><%=post.title%></h1>
+    <p><h1><%=post.title%></h1>  <h5><%=post.date%></h5></p>
     <p>
     <%=post.content.substring(0, 100) + " ..."%>
     <a href="/posts/<%=post._id%>">Read More</a>
     </p>
-
+    
 
     <% }) %>
 
