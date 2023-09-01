@@ -15,7 +15,6 @@ dotenv.config();
 
 const homeStartingContent = "Anyone can connect with their audience through blogging and enjoy the myriad benefits that blogging provides: organic traffic from search engines, promotional content for social media, and recognition from a new audience you haven’t tapped into yet.";
 const aboutContent = "A blog, short for weblog, is a frequently updated web page used for personal commentary or business content. Blogs are often interactive and include sections at the bottom of individual blog posts where readers can leave comments. Most are written in a conversational style to reflect the voice and personal views of the blogger. Some businesses use blogs to connect with target audiences and sell products. Blogs were originally called weblogs, which were websites that consisted of a series of entries arranged in reverse chronological order, so the newest posts appeared at the top. They were frequently updated with new information about various topics.";
-const contactContent = "Contact Us Directly on Twitter: @ARblog , Instagram: @ARblog , Gmail: arjul268@gmail.com ,Message us directly on 8656622207";
 
 //databse call
 connectDb();
@@ -31,6 +30,7 @@ app.use(express.static("public"));
 
 const postSchema = {
   date: {type: String, default: formatDate(new Date().toISOString)},
+  category: String,
   title: String,
   content: String
 };
@@ -49,9 +49,7 @@ app.get("/about", function(req, res){
   res.render("about", {aboutContent: aboutContent});
 });
 
-app.get("/contact", function(req, res){
-  res.render("contact", {contactContent: contactContent});
-});
+
 
 app.get("/compose", function(req, res){
   res.render("compose");
@@ -60,12 +58,32 @@ app.get("/compose", function(req, res){
 app.post("/compose", function(req, res){
   const post = new Post ({
     date: req.body.postDate,
+    category: req.body.postCategory,
     title: req.body.postTitle,
     content: req.body.postBody
   });
 
   post.save();
   res.redirect("/");
+});
+
+app.get("/science" , async(req,res) => {
+      const posts = await Post.find({category: '1'});
+      res.render("science", {
+        posts: posts
+      });
+});
+app.get("/buisnss" , async(req,res) => {
+      const posts = await Post.find({category: '2'});
+      res.render("buisness", {
+        posts: posts
+      });
+});
+app.get("/sports" , async(req,res) => {
+      const posts = await Post.find({category: '3'});
+      res.render("sports", {
+        posts: posts
+      });
 });
 
 app.get("/posts/:postId", async(req, res)=> {
@@ -75,6 +93,7 @@ app.get("/posts/:postId", async(req, res)=> {
     const post = await Post.findOne({_id: requestedPostId}).exec();
       res.render("post", {
         date: post.date,
+        category: post.category,
         title: post.title,
         content: post.content
       });

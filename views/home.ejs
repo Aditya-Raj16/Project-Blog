@@ -1,13 +1,21 @@
-
 <%- include("partials/header"); -%>
 
-    <h1>Home</h1>
-    <p> <%= startingContent %> </p>
+  <h1>Home</h1>
+  <p>
+    <%= startingContent %>
+  </p>
 
 
   <%  posts.forEach(function(post){ %>
 
-    <p><h1><%=post.title%></h1>  <h5><%=post.date%></h5></p>
+    <p><h2><%=post.title%></h2></p>
+  <%  if(post.category === "1"){ %>
+      <p><h4><%=post.date%></h4>  <h4>Space Science and Technology</h4></p>
+  <%  }  else if(post.category === "2"){ %>
+      <p><h4><%=post.date%></h4>  <h4>Buisness Politics and World</h4></p>
+  <%  }  else{ %>
+      <p><h4><%=post.date%></h4>  <h4>Sports and Entertainment</h4></p>
+  <%  }  %>
     <p>
     <%=post.content.substring(0, 100) + " ..."%>
     <a href="/posts/<%=post._id%>">Read More</a>
@@ -17,4 +25,4 @@
     <% }) %>
 
 
-<%- include("partials/footer"); -%>
+  <%- include("partials/footer"); -%>
